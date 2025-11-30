@@ -21,10 +21,10 @@ class LoginActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
 
-        editUserId = findViewById(R.id.editUserId)
-        editPassword = findViewById(R.id.editPassword)
+        editUserId = findViewById(R.id.editLoginUserId)
+        editPassword = findViewById(R.id.editLoginPassword)
         btnLogin = findViewById(R.id.btnLogin)
-        btnGoToRegister = findViewById(R.id.btnGoToRegister)
+        btnGoToRegister = findViewById(R.id.btnRegister)
 
         btnLogin.setOnClickListener {
             val userId = editUserId.text.toString().trim()

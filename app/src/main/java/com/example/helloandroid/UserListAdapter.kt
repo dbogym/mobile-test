@@ -32,9 +32,9 @@ class UserListAdapter(
         view.findViewById<TextView>(R.id.textUserName).text = user.name
         view.findViewById<TextView>(R.id.textUserRole).text = user.role.ifEmpty { "역할 미정" }
         view.findViewById<TextView>(R.id.textUserSkills).text = user.skills.ifEmpty { "기술 스택 미정" }
-        view.findViewById<TextView>(R.id.textUserInterests).text = "❤️ ${user.receivedInterests}"
+        view.findViewById<TextView>(R.id.textUserInterestCount).text = "❤️ ${user.receivedInterests}"
 
-        val btnInterest = view.findViewById<Button>(R.id.btnInterest)
+        val btnInterest = view.findViewById<Button>(R.id.btnUserInterest)
         val isInterested = dbHelper.isInterestExists(currentUserId, user.userId)
 
         if (isInterested) {

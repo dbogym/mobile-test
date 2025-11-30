@@ -22,12 +22,12 @@ class RegisterActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
 
-        editUserId = findViewById(R.id.editUserId)
-        editPassword = findViewById(R.id.editPassword)
-        editName = findViewById(R.id.editName)
-        editContact = findViewById(R.id.editContact)
-        btnRegister = findViewById(R.id.btnRegister)
-        btnBack = findViewById(R.id.btnBack)
+        editUserId = findViewById(R.id.editRegisterUserId)
+        editPassword = findViewById(R.id.editRegisterPassword)
+        editName = findViewById(R.id.editRegisterName)
+        editContact = findViewById(R.id.editRegisterContact)
+        btnRegister = findViewById(R.id.btnRegisterSubmit)
+//        btnBack = findViewById(R.id.btnBack)
 
         btnRegister.setOnClickListener {
             val userId = editUserId.text.toString().trim()

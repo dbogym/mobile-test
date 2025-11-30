@@ -218,8 +218,38 @@ class MainActivity : AppCompatActivity() {
 
         // 기술 스택 GridView
         val gridSkills = dialogView.findViewById<GridView>(R.id.gridSkills)
-        val skillAdapter = SkillGridAdapter(this, currentUser.skills)
+
+        // --- FIX START: SkillGridAdapter 인스턴스화 수정 및 클릭 리스너 추가 ---
+        // 1. 모든 스킬 목록 가져오기
+        val allSkills = SkillGridAdapter.getDefaultSkills()
+
+        // 2. 현재 선택된 스킬 목록을 String에서 ArrayList<String>으로 변환 (어댑터에 전달)
+        val userSelectedSkillsList = ArrayList(
+            currentUser.skills
+                .split(",")
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+        )
+
+        // 3. 올바른 3개의 인자를 사용하여 어댑터 인스턴스화
+        val skillAdapter = SkillGridAdapter(
+            this,
+            allSkills, // 모든 스킬 목록
+            userSelectedSkillsList // 현재 선택된 스킬 목록 (mutable list)
+        )
         gridSkills.adapter = skillAdapter
+
+        // 4. GridView 아이템 클릭 리스너 설정 (선택/취소 로직)
+        gridSkills.setOnItemClickListener { _, _, position, _ ->
+            val skill = skillAdapter.getItem(position) as String
+            if (userSelectedSkillsList.contains(skill)) {
+                userSelectedSkillsList.remove(skill)
+            } else {
+                userSelectedSkillsList.add(skill)
+            }
+            skillAdapter.notifyDataSetChanged()
+        }
+        // --- FIX END ---
 
         val editExperience = dialogView.findViewById<EditText>(R.id.editExperience)
         val editStrength = dialogView.findViewById<EditText>(R.id.editStrength)
@@ -227,7 +257,8 @@ class MainActivity : AppCompatActivity() {
         val editPreferredTeammate = dialogView.findViewById<EditText>(R.id.editPreferredTeammate)
 
         // 협업 스타일 Spinner
-        val spinnerCollaboration = dialogView.findViewById<Spinner>(R.id.spinnerCollaboration)
+        // XML ID에 맞게 수정: spinnerCollaboration -> spinnerCollaborationStyle
+        val spinnerCollaboration = dialogView.findViewById<Spinner>(R.id.spinnerCollaborationStyle)
         val collaborationStyles = arrayOf(
             "적극적 소통", "꼼꼼한 문서화", "리더십 발휘", "창의적 협업", "성실한 일정 준수",
             "분석적 접근", "코드 품질 중시", "도전적 학습", "효율성 추구", "안정성 중시"
@@ -255,7 +286,9 @@ class MainActivity : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("저장") { _, _ ->
                 currentUser.role = spinnerRole.selectedItem.toString()
-                currentUser.skills = skillAdapter.getSelectedSkills()
+                // --- FIX: getSelectedSkills() 대신 현재 관리하는 리스트를 String으로 변환하여 저장 ---
+                currentUser.skills = userSelectedSkillsList.joinToString(", ")
+                // ---------------------------------------------------------------------------------
                 currentUser.experience = editExperience.text.toString()
                 currentUser.strength = editStrength.text.toString()
                 currentUser.interests = editInterests.text.toString()
