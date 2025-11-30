@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="학번"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/editRegisterUserId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="예: 2024001"
+            android:inputType="text"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이름"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/editRegisterName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="이름을 입력하세요"
+            android:inputType="text"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/editRegisterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="비밀번호 (최소 4자)"
+            android:inputType="textPassword"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 확인"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/editRegisterPasswordConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="비밀번호 재입력"
+            android:inputType="textPassword"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="연락처"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/editRegisterContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="이메일 또는 전화번호"
+            android:inputType="text"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/btnRegisterSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="가입하기"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</ScrollView>

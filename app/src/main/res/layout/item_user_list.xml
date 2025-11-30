@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textUserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="이름"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textUserInterestCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★ 0"
+                android:textColor="#FF9800"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textUserRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="역할"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/textUserSkills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기술"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnUserInterest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🤍 관심"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>

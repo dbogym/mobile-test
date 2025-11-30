@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <!-- 탭 버튼 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnTabProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="프로필"
+            android:background="#BBDEFB"/>
+
+        <Button
+            android:id="@+id/btnTabUsers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="유저"
+            android:background="#BBDEFB"/>
+
+        <Button
+            android:id="@+id/btnTabInterest"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="관심"
+            android:background="#BBDEFB"/>
+
+        <Button
+            android:id="@+id/btnTabSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="설정"
+            android:background="#BBDEFB"/>
+
+        <Button
+            android:id="@+id/btnTabProjects"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="프로젝트"
+            android:background="#BBDEFB"/>
+
+    </LinearLayout>
+
+    <!-- 탭 컨텐츠 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- 프로필 탭 -->
+        <ScrollView
+            android:id="@+id/layoutProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.example.helloandroid.ProfileBadgeView
+                    android:id="@+id/profileBadge"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Level은 받은 관심 수에 따라 결정됩니다"
+                    android:textSize="12sp"
+                    android:textColor="#757575"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🛠️ 기술 스택"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:id="@+id/textProfileSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📚 개발 경험"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textProfileExperience"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💪 자신 있는 부분"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textProfileStrength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💡 관심 주제"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textProfileInterests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🤝 함께 하고 싶은 팀원"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textProfilePreferredTeammate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎯 협업 스타일"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textProfileCollaborationStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💻 GitHub"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textProfileGithub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="미정"
+                    android:textSize="14sp"
+                    android:padding="8dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="프로필 수정"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- 유저 탭 -->
+        <ScrollView
+            android:id="@+id/layoutUsers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="팀원 찾기"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="역할: "
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerRoleFilter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listViewUsers"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:divider="#CCCCCC"
+                    android:dividerHeight="1dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- 관심 탭 -->
+        <ScrollView
+            android:id="@+id/layoutInterest"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관심 관리"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💝 내가 관심 표시한 유저"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/textMyInterests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="관심 표시한 유저가 없습니다"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:background="#FFF3E0"
+                    android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="❤️ 나에게 관심 표시한 유저"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/textReceivedInterests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="나에게 관심을 표시한 유저가 없습니다"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:background="#E8F5E9"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- 설정 탭 -->
+        <ScrollView
+            android:id="@+id/layoutSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="설정"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📱 마이페이지"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/textUserInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="이름: \n학번: \n연락처: "
+                    android:textSize="14sp"
+                    android:padding="12dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btnEditUserInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="내 정보 수정"
+                    android:layout_marginBottom="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ 데이터 관리"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btnExportData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="데이터 내보내기"
+                    android:layout_marginBottom="8dp"/>
+
+                <Button
+                    android:id="@+id/btnResetData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="데이터 초기화"
+                    android:layout_marginBottom="8dp"/>
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="로그아웃"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- 프로젝트 탭 -->
+        <LinearLayout
+            android:id="@+id/layoutProjects"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📋 프로젝트 모집"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="팀 프로젝트를 등록하고\n팀원을 모집하세요!"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"/>
+
+            <Button
+                android:id="@+id/btnGoToProjects"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="프로젝트 게시판 열기"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
