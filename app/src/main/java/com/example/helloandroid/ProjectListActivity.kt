@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
-// 11주차: 액티비티와 인텐트
 class ProjectListActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DBHelper

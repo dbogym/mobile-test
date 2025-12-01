@@ -62,14 +62,14 @@ class ProfileBadgeView @JvmOverloads constructor(
         val shadowRect = RectF(24f, 24f, width - 16f, height - 16f)
         canvas.drawRoundRect(shadowRect, cornerRadius, cornerRadius, paint)
 
-        // 이름 (상단 중앙)
+        // 이름
         paint.color = Color.WHITE
         paint.textSize = 42f
         paint.style = Paint.Style.FILL
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         canvas.drawText(userName, centerX, centerY - 20, paint)
 
-        // 역할 (이름 아래)
+        // 역할
         paint.textSize = 26f
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         paint.color = Color.parseColor("#E0E0E0")
@@ -90,7 +90,7 @@ class ProfileBadgeView @JvmOverloads constructor(
         )
         canvas.drawRoundRect(interestRect, 16f, 16f, paint)
 
-        // 하트 아이콘 (텍스트로)
+        // 하트 아이콘
         paint.color = Color.parseColor("#FF4081")
         paint.textSize = 28f
         canvas.drawText("❤", centerX - 60f, interestCardTop + 34f, paint)

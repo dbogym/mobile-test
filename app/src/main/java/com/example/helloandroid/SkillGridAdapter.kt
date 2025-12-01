@@ -97,7 +97,7 @@ class SkillGridAdapter(
                 "GitHub Actions",
                 "Jenkins",
 
-                // AI/ML & 데이터 과학
+                // AI/ML
                 "TensorFlow",
                 "PyTorch",
                 "Scikit-learn",

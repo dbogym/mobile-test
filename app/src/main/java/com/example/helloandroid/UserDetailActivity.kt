@@ -6,7 +6,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-// 11주차: 액티비티와 인텐트 - 사용자 상세 정보
 class UserDetailActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DBHelper

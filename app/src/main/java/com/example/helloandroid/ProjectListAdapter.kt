@@ -10,7 +10,6 @@ import android.widget.TextView
 import java.text.SimpleDateFormat
 import java.util.*
 
-// 11주차: ListView용 어댑터
 class ProjectListAdapter(
     private val context: Context,
     private var projects: ArrayList<Project>,
