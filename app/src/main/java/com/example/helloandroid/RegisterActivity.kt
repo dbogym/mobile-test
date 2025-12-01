@@ -14,7 +14,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var editName: EditText
     private lateinit var editContact: EditText
     private lateinit var btnRegister: Button
-    private lateinit var btnBack: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +26,6 @@ class RegisterActivity : AppCompatActivity() {
         editName = findViewById(R.id.editRegisterName)
         editContact = findViewById(R.id.editRegisterContact)
         btnRegister = findViewById(R.id.btnRegisterSubmit)
-//        btnBack = findViewById(R.id.btnBack)
 
         btnRegister.setOnClickListener {
             val userId = editUserId.text.toString().trim()
@@ -47,16 +45,19 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (dbHelper.registerUser(userId, password, name, contact)) {
+            val newUser = User(
+                userId = userId,
+                password = password,
+                name = name,
+                contact = contact
+            )
+
+            if (dbHelper.registerUser(newUser)) {
                 Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        btnBack.setOnClickListener {
-            finish()
         }
     }
 }

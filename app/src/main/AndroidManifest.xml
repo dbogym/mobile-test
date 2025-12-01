@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloAndroid"
         tools:targetApi="31">
-        
+
         <!-- 로그인 액티비티 (앱 시작 화면) -->
         <activity
             android:name=".LoginActivity"
@@ -43,9 +43,35 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
+        <!-- 프로젝트 목록 액티비티 -->
         <activity
             android:name=".ProjectListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- 프로젝트 생성 액티비티 -->
+        <activity
+            android:name=".CreateProjectActivity"
+            android:exported="false"
+            android:parentActivityName=".ProjectListActivity" />
+
+        <!-- 프로젝트 상세 액티비티 -->
+        <activity
+            android:name=".ProjectDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".ProjectListActivity" />
+
+        <!-- 내 프로젝트 액티비티 -->
+        <activity
+            android:name=".MyProjectsActivity"
+            android:exported="false"
+            android:parentActivityName=".ProjectListActivity" />
+
+        <!-- 내 지원내역 액티비티 -->
+        <activity
+            android:name=".MyApplicationsActivity"
+            android:exported="false"
+            android:parentActivityName=".ProjectListActivity" />
 
     </application>
 

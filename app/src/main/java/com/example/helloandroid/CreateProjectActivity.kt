@@ -17,7 +17,7 @@ class CreateProjectActivity : AppCompatActivity() {
     private lateinit var editDuration: EditText
     private lateinit var btnSubmit: Button
 
-    private val availableRoles = arrayOf("프론트엔드", "백엔드", "풀스택", "디자이너", "기획자", "PM")
+    private val availableRoles = arrayOf("프론트엔드", "백엔드", "풀스택", "디자이너", "기획자", "PM", "AI/ML 엔지니어", "데이터 사이언티스트")
     private val selectedRoles = ArrayList<String>()
 
     private val availableSkills = arrayOf(
@@ -26,7 +26,7 @@ class CreateProjectActivity : AppCompatActivity() {
         "Android", "iOS", "Flutter", "React Native", "Swift", "SwiftUI",
         "MySQL", "PostgreSQL", "MongoDB", "Redis", "Firebase", "SQLite",
         "AWS", "Azure", "GCP", "Docker", "Kubernetes", "GitHub Actions", "Jenkins",
-        "TensorFlow", "PyTorch", "Pandas", "NumPy", "Scikit-learn",
+        "TensorFlow", "PyTorch", "Scikit-learn", "Pandas", "NumPy", "OpenCV", "Keras", "Hugging Face",
         "Git", "REST API", "GraphQL", "WebSocket", "Linux", "Figma", "Adobe XD", "Unity", "C++", "C#", "Go", "Rust"
     )
     private val selectedSkills = ArrayList<String>()
@@ -138,6 +138,7 @@ class CreateProjectActivity : AppCompatActivity() {
             val projectId = dbHelper.createProject(project)
             if (projectId != -1L) {
                 Toast.makeText(this, "프로젝트가 등록되었습니다!", Toast.LENGTH_SHORT).show()
+                setResult(RESULT_OK)
                 finish()
             } else {
                 Toast.makeText(this, "프로젝트 등록 실패", Toast.LENGTH_SHORT).show()

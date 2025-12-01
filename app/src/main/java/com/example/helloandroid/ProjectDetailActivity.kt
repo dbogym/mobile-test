@@ -10,17 +10,18 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DBHelper
     private lateinit var currentUserId: String
-    private var projectId: Int = 0
+    private var currentProjectId: Int = -1
+    private var currentProject: Project? = null
 
-    private lateinit var textTitle: TextView
-    private lateinit var textCreator: TextView
-    private lateinit var textDescription: TextView
-    private lateinit var textRoles: TextView
-    private lateinit var textSkills: TextView
-    private lateinit var textMembers: TextView
-    private lateinit var textDuration: TextView
-    private lateinit var textStatus: TextView
-    private lateinit var listViewMembers: ListView
+    private lateinit var textProjectTitle: TextView
+    private lateinit var textProjectCreator: TextView
+    private lateinit var textProjectStatus: TextView
+    private lateinit var textProjectMembers: TextView
+    private lateinit var textProjectDuration: TextView
+    private lateinit var textProjectDescription: TextView
+    private lateinit var textProjectRoles: TextView
+    private lateinit var textProjectSkills: TextView
+    private lateinit var textMembersList: TextView
     private lateinit var btnApply: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +33,9 @@ class ProjectDetailActivity : AppCompatActivity() {
             finish()
             return
         }
-        projectId = intent.getIntExtra("projectId", 0)
 
-        if (projectId == 0) {
-            Toast.makeText(this, "잘못된 프로젝트입니다", Toast.LENGTH_SHORT).show()
+        currentProjectId = intent.getIntExtra("projectId", -1)
+        if (currentProjectId == -1) {
             finish()
             return
         }
@@ -45,21 +45,25 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        textTitle = findViewById(R.id.textTitle)
-        textCreator = findViewById(R.id.textCreator)
-        textDescription = findViewById(R.id.textDescription)
-        textRoles = findViewById(R.id.textRoles)
-        textSkills = findViewById(R.id.textSkills)
-        textMembers = findViewById(R.id.textMembers)
-        textDuration = findViewById(R.id.textDuration)
-        textStatus = findViewById(R.id.textStatus)
-        listViewMembers = findViewById(R.id.listViewMembers)
+        textProjectTitle = findViewById(R.id.textTitle)
+        textProjectCreator = findViewById(R.id.textCreator)
+        textProjectStatus = findViewById(R.id.textStatus)
+        textProjectMembers = findViewById(R.id.textMembers)
+        textProjectDuration = findViewById(R.id.textDuration)
+        textProjectDescription = findViewById(R.id.textDescription)
+        textProjectRoles = findViewById(R.id.textRoles)
+        textProjectSkills = findViewById(R.id.textSkills)
+        textMembersList = findViewById(R.id.textMembersList)
         btnApply = findViewById(R.id.btnApply)
+
+        btnApply.setOnClickListener {
+            showApplyDialog()
+        }
     }
 
     private fun loadProjectDetail() {
-        val project = dbHelper.getProject(projectId)
-        if (project == null) {
+        currentProject = dbHelper.getProject(currentProjectId)
+        val project = currentProject ?: run {
             Toast.makeText(this, "프로젝트를 찾을 수 없습니다", Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -67,71 +71,79 @@ class ProjectDetailActivity : AppCompatActivity() {
 
         val creator = dbHelper.getUser(project.creatorId)
 
-        textTitle.text = project.title
-        textCreator.text = "팀장: ${creator?.name ?: "알 수 없음"}"
-        textDescription.text = project.description
-        textRoles.text = "필요한 역할: ${project.requiredRoles}"
-        textSkills.text = "필요한 기술: ${project.requiredSkills}"
-        textMembers.text = "모집 인원: ${project.currentMembers}/${project.maxMembers}명"
-        textDuration.text = "프로젝트 기간: ${project.duration}"
+        textProjectTitle.text = project.title
+        textProjectCreator.text = "작성자: ${creator?.name ?: "알 수 없음"}"
+        textProjectMembers.text = "${project.currentMembers}/${project.maxMembers}명"
+        textProjectDuration.text = project.duration
+        textProjectDescription.text = project.description
+        textProjectRoles.text = project.requiredRoles
+        textProjectSkills.text = project.requiredSkills.ifEmpty { "없음" }
 
         when (project.status) {
             "recruiting" -> {
-                textStatus.text = "모집중"
-                textStatus.setBackgroundColor(android.graphics.Color.parseColor("#4CAF50"))
+                textProjectStatus.text = "모집중"
+                textProjectStatus.setBackgroundColor(android.graphics.Color.parseColor("#4CAF50"))
+                textProjectStatus.setTextColor(android.graphics.Color.WHITE)
             }
             "closed" -> {
-                textStatus.text = "모집마감"
-                textStatus.setBackgroundColor(android.graphics.Color.parseColor("#9E9E9E"))
+                textProjectStatus.text = "모집마감"
+                textProjectStatus.setBackgroundColor(android.graphics.Color.parseColor("#9E9E9E"))
+                textProjectStatus.setTextColor(android.graphics.Color.WHITE)
+            }
+            "completed" -> {
+                textProjectStatus.text = "완료"
+                textProjectStatus.setBackgroundColor(android.graphics.Color.parseColor("#2196F3"))
+                textProjectStatus.setTextColor(android.graphics.Color.WHITE)
             }
         }
 
-        // 팀원 목록
-        val members = dbHelper.getProjectMembers(projectId)
-        val memberAdapter = MemberAdapter(this, members)
-        listViewMembers.adapter = memberAdapter
+        // 지원 버튼 표시 여부
+        val isCreator = project.creatorId == currentUserId
+        val hasApplied = dbHelper.hasApplied(currentProjectId, currentUserId)
+        val isMember = dbHelper.getProjectMembers(currentProjectId).any { it.userId == currentUserId }
 
-        // 지원 버튼 설정
-        setupApplyButton(project)
-    }
-
-    private fun setupApplyButton(project: Project) {
-        // 자신의 프로젝트면 지원 불가
-        if (project.creatorId == currentUserId) {
+        if (isCreator || isMember) {
             btnApply.visibility = View.GONE
-            return
-        }
-
-        // 이미 지원했는지 확인
-        if (dbHelper.isAlreadyApplied(projectId, currentUserId)) {
-            btnApply.text = "이미 지원함"
+        } else if (hasApplied) {
+            btnApply.text = "지원 완료"
             btnApply.isEnabled = false
-            return
-        }
-
-        // 모집 마감이면 지원 불가
-        if (project.status == "closed") {
+        } else if (project.status != "recruiting") {
             btnApply.text = "모집 마감"
             btnApply.isEnabled = false
-            return
+        } else {
+            btnApply.visibility = View.VISIBLE
+            btnApply.isEnabled = true
         }
 
-        btnApply.setOnClickListener {
-            showApplyDialog(project)
+        // 팀원 목록 표시
+        loadMembers()
+    }
+
+    private fun loadMembers() {
+        val members = dbHelper.getProjectMembers(currentProjectId)
+
+        if (members.isEmpty()) {
+            textMembersList.text = "아직 팀원이 없습니다"
+        } else {
+            textMembersList.text = members.joinToString("\n") { member ->
+                "• ${member.name} (${member.role})"
+            }
         }
     }
 
-    private fun showApplyDialog(project: Project) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_apply_project, null)
+    private fun showApplyDialog() {
+        val project = currentProject ?: return
+        val currentUser = dbHelper.getUser(currentUserId) ?: return
+
+        val dialogView = layoutInflater.inflate(R.layout.dialog_project_apply, null)
 
         val spinnerRole = dialogView.findViewById<Spinner>(R.id.spinnerApplyRole)
-        val editMessage = dialogView.findViewById<EditText>(R.id.editApplyMessage)
-
-        // 필요한 역할로 Spinner 설정
         val roles = project.requiredRoles.split(", ")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, roles)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerRole.adapter = adapter
+
+        val editMessage = dialogView.findViewById<EditText>(R.id.editApplyMessage)
 
         AlertDialog.Builder(this)
             .setTitle("프로젝트 지원")
@@ -140,12 +152,16 @@ class ProjectDetailActivity : AppCompatActivity() {
                 val selectedRole = spinnerRole.selectedItem.toString()
                 val message = editMessage.text.toString().trim()
 
-                if (message.isEmpty()) {
-                    Toast.makeText(this, "지원 메시지를 입력하세요", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
+                val application = Application(
+                    projectId = currentProjectId,
+                    userId = currentUserId,
+                    userName = currentUser.name,
+                    userRole = selectedRole,
+                    message = message
+                )
 
-                if (dbHelper.applyToProject(projectId, currentUserId, selectedRole, message)) {
+                val result = dbHelper.applyToProject(application)
+                if (result != -1L) {
                     Toast.makeText(this, "지원이 완료되었습니다", Toast.LENGTH_SHORT).show()
                     loadProjectDetail()
                 } else {
@@ -159,31 +175,5 @@ class ProjectDetailActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadProjectDetail()
-    }
-}
-
-class MemberAdapter(
-    private val context: android.content.Context,
-    private val members: ArrayList<Member>
-) : BaseAdapter() {
-
-    override fun getCount(): Int = members.size
-
-    override fun getItem(position: Int): Any = members[position]
-
-    override fun getItemId(position: Int): Long = position.toLong()
-
-    override fun getView(position: Int, convertView: View?, parent: android.view.ViewGroup?): View {
-        val view = convertView ?: android.view.LayoutInflater.from(context)
-            .inflate(R.layout.item_member_list, parent, false)
-
-        val member = members[position]
-
-        view.findViewById<TextView>(R.id.textMemberName).text = member.userName
-        view.findViewById<TextView>(R.id.textMemberRole).text = member.role
-        view.findViewById<TextView>(R.id.textMemberSkills).text = member.userSkills.ifEmpty { "기술 스택 미정" }
-        view.findViewById<TextView>(R.id.textMemberContact).text = "📞 ${member.userContact}"
-
-        return view
     }
 }

@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <!-- 탭 버튼 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="프로필"
+            android:textSize="11sp"
+            android:padding="8dp"
             android:background="#BBDEFB"/>
 
         <Button
@@ -25,6 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="유저"
+            android:textSize="11sp"
+            android:padding="8dp"
             android:background="#BBDEFB"/>
 
         <Button
@@ -33,14 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="관심"
-            android:background="#BBDEFB"/>
-
-        <Button
-            android:id="@+id/btnTabSettings"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="설정"
+            android:textSize="11sp"
+            android:padding="8dp"
             android:background="#BBDEFB"/>
 
         <Button
@@ -49,17 +46,27 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="프로젝트"
+            android:textSize="11sp"
+            android:padding="8dp"
+            android:background="#BBDEFB"/>
+
+        <Button
+            android:id="@+id/btnTabSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="설정"
+            android:textSize="11sp"
+            android:padding="8dp"
             android:background="#BBDEFB"/>
 
     </LinearLayout>
 
-    <!-- 탭 컨텐츠 -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- 프로필 탭 -->
         <ScrollView
             android:id="@+id/layoutProfile"
             android:layout_width="match_parent"
@@ -75,16 +82,8 @@
                 <com.example.helloandroid.ProfileBadgeView
                     android:id="@+id/profileBadge"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="16dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Level은 받은 관심 수에 따라 결정됩니다"
-                    android:textSize="12sp"
-                    android:textColor="#757575"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_height="180dp"
+                    android:layout_marginBottom="24dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -216,7 +215,6 @@
 
         </ScrollView>
 
-        <!-- 유저 탭 -->
         <ScrollView
             android:id="@+id/layoutUsers"
             android:layout_width="match_parent"
@@ -269,7 +267,6 @@
 
         </ScrollView>
 
-        <!-- 관심 탭 -->
         <ScrollView
             android:id="@+id/layoutInterest"
             android:layout_width="match_parent"
@@ -329,7 +326,96 @@
 
         </ScrollView>
 
-        <!-- 설정 탭 -->
+        <ScrollView
+            android:id="@+id/layoutProjects"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="프로젝트 모집 게시판"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnCreateProject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📝 프로젝트 등록"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상태: "
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerStatusFilter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/textProjectCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0개 프로젝트"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btnMyProjects"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="내 프로젝트"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Button
+                        android:id="@+id/btnMyApplications"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="내 지원내역"/>
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listViewProjects"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:divider="#CCCCCC"
+                    android:dividerHeight="1dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
         <ScrollView
             android:id="@+id/layoutSettings"
             android:layout_width="match_parent"
@@ -406,42 +492,6 @@
             </LinearLayout>
 
         </ScrollView>
-
-        <!-- 프로젝트 탭 -->
-        <LinearLayout
-            android:id="@+id/layoutProjects"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📋 프로젝트 모집"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="팀 프로젝트를 등록하고\n팀원을 모집하세요!"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:layout_marginBottom="24dp"/>
-
-            <Button
-                android:id="@+id/btnGoToProjects"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="프로젝트 게시판 열기"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp"/>
-
-        </LinearLayout>
 
     </FrameLayout>
 

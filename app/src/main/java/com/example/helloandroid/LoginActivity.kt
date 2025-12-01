@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -14,6 +15,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var btnGoToRegister: Button
+    private lateinit var textLoginInfo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,9 @@ class LoginActivity : AppCompatActivity() {
         editPassword = findViewById(R.id.editLoginPassword)
         btnLogin = findViewById(R.id.btnLogin)
         btnGoToRegister = findViewById(R.id.btnRegister)
+        textLoginInfo = findViewById(R.id.textLoginInfo)
+
+        updateUserCount()
 
         btnLogin.setOnClickListener {
             val userId = editUserId.text.toString().trim()
@@ -35,9 +40,9 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val userName = dbHelper.loginUser(userId, password)
-            if (userName != null) {
-                Toast.makeText(this, "${userName}님 환영합니다!", Toast.LENGTH_SHORT).show()
+            val user = dbHelper.loginUser(userId, password)
+            if (user != null) {
+                Toast.makeText(this, "${user.name}님 환영합니다!", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("userId", userId)
@@ -52,5 +57,15 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUserCount()
+    }
+
+    private fun updateUserCount() {
+        val userCount = dbHelper.getUserCount()
+        textLoginInfo.text = "현재 등록된 회원: ${userCount}명"
     }
 }

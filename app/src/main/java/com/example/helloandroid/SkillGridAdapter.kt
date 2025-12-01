@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-// 11주차: GridView용 어댑터
 class SkillGridAdapter(
     private val context: Context,
     private val skills: ArrayList<String>,
@@ -38,7 +37,6 @@ class SkillGridAdapter(
         val skill = skills[position]
         textView.text = skill
 
-        // 선택된 스킬: 초록색, 미선택: 회색
         if (selectedSkills.contains(skill)) {
             textView.setBackgroundColor(Color.parseColor("#4CAF50"))
             textView.setTextColor(Color.WHITE)
@@ -99,12 +97,15 @@ class SkillGridAdapter(
                 "GitHub Actions",
                 "Jenkins",
 
-                // 데이터/AI
+                // AI/ML & 데이터 과학
                 "TensorFlow",
                 "PyTorch",
+                "Scikit-learn",
                 "Pandas",
                 "NumPy",
-                "Scikit-learn",
+                "OpenCV",
+                "Keras",
+                "Hugging Face",
 
                 // 기타
                 "Git",

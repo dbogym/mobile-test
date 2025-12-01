@@ -15,21 +15,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentUserId: String
     private lateinit var currentUser: User
 
-    // 탭 버튼
     private lateinit var btnTabProfile: Button
     private lateinit var btnTabUsers: Button
     private lateinit var btnTabInterest: Button
-    private lateinit var btnTabSettings: Button
     private lateinit var btnTabProjects: Button
+    private lateinit var btnTabSettings: Button
 
-    // 탭 레이아웃
     private lateinit var layoutProfile: ScrollView
     private lateinit var layoutUsers: ScrollView
     private lateinit var layoutInterest: ScrollView
+    private lateinit var layoutProjects: ScrollView
     private lateinit var layoutSettings: ScrollView
-    private lateinit var layoutProjects: LinearLayout
 
-    // 프로필 탭 위젯
     private lateinit var profileBadge: ProfileBadgeView
     private lateinit var textProfileSkills: TextView
     private lateinit var textProfileExperience: TextView
@@ -40,16 +37,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textProfileGithub: TextView
     private lateinit var btnEditProfile: Button
 
-    // 유저 탭 위젯
     private lateinit var spinnerRoleFilter: Spinner
     private lateinit var listViewUsers: ListView
     private var userListAdapter: UserListAdapter? = null
 
-    // 관심 탭 위젯
     private lateinit var textMyInterests: TextView
     private lateinit var textReceivedInterests: TextView
 
-    // 설정 탭 위젯
+    private lateinit var btnCreateProject: Button
+    private lateinit var spinnerStatusFilter: Spinner
+    private lateinit var textProjectCount: TextView
+    private lateinit var listViewProjects: ListView
+    private lateinit var btnMyProjects: Button
+    private lateinit var btnMyApplications: Button
+    private var projectListAdapter: ProjectListAdapter? = null
+
     private lateinit var textUserInfo: TextView
     private lateinit var btnEditUserInfo: Button
     private lateinit var btnExportData: Button
@@ -77,28 +79,25 @@ class MainActivity : AppCompatActivity() {
         setupProfileTab()
         setupUsersTab()
         setupInterestTab()
-        setupSettingsTab()
         setupProjectsTab()
+        setupSettingsTab()
 
         showTab(0)
     }
 
     private fun initViews() {
-        // 탭 버튼
         btnTabProfile = findViewById(R.id.btnTabProfile)
         btnTabUsers = findViewById(R.id.btnTabUsers)
         btnTabInterest = findViewById(R.id.btnTabInterest)
-        btnTabSettings = findViewById(R.id.btnTabSettings)
         btnTabProjects = findViewById(R.id.btnTabProjects)
+        btnTabSettings = findViewById(R.id.btnTabSettings)
 
-        // 탭 레이아웃
         layoutProfile = findViewById(R.id.layoutProfile)
         layoutUsers = findViewById(R.id.layoutUsers)
         layoutInterest = findViewById(R.id.layoutInterest)
-        layoutSettings = findViewById(R.id.layoutSettings)
         layoutProjects = findViewById(R.id.layoutProjects)
+        layoutSettings = findViewById(R.id.layoutSettings)
 
-        // 프로필 탭
         profileBadge = findViewById(R.id.profileBadge)
         textProfileSkills = findViewById(R.id.textProfileSkills)
         textProfileExperience = findViewById(R.id.textProfileExperience)
@@ -109,15 +108,19 @@ class MainActivity : AppCompatActivity() {
         textProfileGithub = findViewById(R.id.textProfileGithub)
         btnEditProfile = findViewById(R.id.btnEditProfile)
 
-        // 유저 탭
         spinnerRoleFilter = findViewById(R.id.spinnerRoleFilter)
         listViewUsers = findViewById(R.id.listViewUsers)
 
-        // 관심 탭
         textMyInterests = findViewById(R.id.textMyInterests)
         textReceivedInterests = findViewById(R.id.textReceivedInterests)
 
-        // 설정 탭
+        btnCreateProject = findViewById(R.id.btnCreateProject)
+        spinnerStatusFilter = findViewById(R.id.spinnerStatusFilter)
+        textProjectCount = findViewById(R.id.textProjectCount)
+        listViewProjects = findViewById(R.id.listViewProjects)
+        btnMyProjects = findViewById(R.id.btnMyProjects)
+        btnMyApplications = findViewById(R.id.btnMyApplications)
+
         textUserInfo = findViewById(R.id.textUserInfo)
         btnEditUserInfo = findViewById(R.id.btnEditUserInfo)
         btnExportData = findViewById(R.id.btnExportData)
@@ -129,24 +132,22 @@ class MainActivity : AppCompatActivity() {
         btnTabProfile.setOnClickListener { showTab(0) }
         btnTabUsers.setOnClickListener { showTab(1) }
         btnTabInterest.setOnClickListener { showTab(2) }
-        btnTabSettings.setOnClickListener { showTab(3) }
-        btnTabProjects.setOnClickListener { showTab(4) }
+        btnTabProjects.setOnClickListener { showTab(3) }
+        btnTabSettings.setOnClickListener { showTab(4) }
     }
 
     private fun showTab(index: Int) {
-        // 모든 탭 숨기기
         layoutProfile.visibility = View.GONE
         layoutUsers.visibility = View.GONE
         layoutInterest.visibility = View.GONE
-        layoutSettings.visibility = View.GONE
         layoutProjects.visibility = View.GONE
+        layoutSettings.visibility = View.GONE
 
-        // 모든 버튼 기본 색상
         btnTabProfile.setBackgroundColor(Color.parseColor("#BBDEFB"))
         btnTabUsers.setBackgroundColor(Color.parseColor("#BBDEFB"))
         btnTabInterest.setBackgroundColor(Color.parseColor("#BBDEFB"))
-        btnTabSettings.setBackgroundColor(Color.parseColor("#BBDEFB"))
         btnTabProjects.setBackgroundColor(Color.parseColor("#BBDEFB"))
+        btnTabSettings.setBackgroundColor(Color.parseColor("#BBDEFB"))
 
         when (index) {
             0 -> {
@@ -165,13 +166,14 @@ class MainActivity : AppCompatActivity() {
                 refreshInterestTab()
             }
             3 -> {
+                layoutProjects.visibility = View.VISIBLE
+                btnTabProjects.setBackgroundColor(Color.parseColor("#6200EE"))
+                refreshProjectsTab()
+            }
+            4 -> {
                 layoutSettings.visibility = View.VISIBLE
                 btnTabSettings.setBackgroundColor(Color.parseColor("#6200EE"))
                 refreshSettingsTab()
-            }
-            4 -> {
-                layoutProjects.visibility = View.VISIBLE
-                btnTabProjects.setBackgroundColor(Color.parseColor("#6200EE"))
             }
         }
     }
@@ -203,43 +205,26 @@ class MainActivity : AppCompatActivity() {
     private fun showEditProfileDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_edit_profile, null)
 
-        // Spinner 설정
         val spinnerRole = dialogView.findViewById<Spinner>(R.id.spinnerRole)
-        val roles = arrayOf("프론트엔드", "백엔드", "풀스택", "디자이너", "기획자", "PM")
+        val roles = arrayOf("프론트엔드", "백엔드", "풀스택", "디자이너", "기획자", "PM", "AI/ML 엔지니어", "데이터 사이언티스트")
         val roleAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, roles)
         roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerRole.adapter = roleAdapter
 
-        // 현재 역할 선택
         val currentRoleIndex = roles.indexOf(currentUser.role)
         if (currentRoleIndex >= 0) {
             spinnerRole.setSelection(currentRoleIndex)
         }
 
-        // 기술 스택 GridView
         val gridSkills = dialogView.findViewById<GridView>(R.id.gridSkills)
-
-        // --- FIX START: SkillGridAdapter 인스턴스화 수정 및 클릭 리스너 추가 ---
-        // 1. 모든 스킬 목록 가져오기
         val allSkills = SkillGridAdapter.getDefaultSkills()
-
-        // 2. 현재 선택된 스킬 목록을 String에서 ArrayList<String>으로 변환 (어댑터에 전달)
         val userSelectedSkillsList = ArrayList(
-            currentUser.skills
-                .split(",")
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
+            currentUser.skills.split(",").map { it.trim() }.filter { it.isNotEmpty() }
         )
 
-        // 3. 올바른 3개의 인자를 사용하여 어댑터 인스턴스화
-        val skillAdapter = SkillGridAdapter(
-            this,
-            allSkills, // 모든 스킬 목록
-            userSelectedSkillsList // 현재 선택된 스킬 목록 (mutable list)
-        )
+        val skillAdapter = SkillGridAdapter(this, allSkills, userSelectedSkillsList)
         gridSkills.adapter = skillAdapter
 
-        // 4. GridView 아이템 클릭 리스너 설정 (선택/취소 로직)
         gridSkills.setOnItemClickListener { _, _, position, _ ->
             val skill = skillAdapter.getItem(position) as String
             if (userSelectedSkillsList.contains(skill)) {
@@ -249,15 +234,11 @@ class MainActivity : AppCompatActivity() {
             }
             skillAdapter.notifyDataSetChanged()
         }
-        // --- FIX END ---
 
         val editExperience = dialogView.findViewById<EditText>(R.id.editExperience)
         val editStrength = dialogView.findViewById<EditText>(R.id.editStrength)
         val editInterests = dialogView.findViewById<EditText>(R.id.editInterests)
         val editPreferredTeammate = dialogView.findViewById<EditText>(R.id.editPreferredTeammate)
-
-        // 협업 스타일 Spinner
-        // XML ID에 맞게 수정: spinnerCollaboration -> spinnerCollaborationStyle
         val spinnerCollaboration = dialogView.findViewById<Spinner>(R.id.spinnerCollaborationStyle)
         val collaborationStyles = arrayOf(
             "적극적 소통", "꼼꼼한 문서화", "리더십 발휘", "창의적 협업", "성실한 일정 준수",
@@ -267,7 +248,6 @@ class MainActivity : AppCompatActivity() {
         collaborationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCollaboration.adapter = collaborationAdapter
 
-        // 현재 협업 스타일 선택
         val currentCollaborationIndex = collaborationStyles.indexOf(currentUser.collaborationStyle)
         if (currentCollaborationIndex >= 0) {
             spinnerCollaboration.setSelection(currentCollaborationIndex)
@@ -286,9 +266,7 @@ class MainActivity : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("저장") { _, _ ->
                 currentUser.role = spinnerRole.selectedItem.toString()
-                // --- FIX: getSelectedSkills() 대신 현재 관리하는 리스트를 String으로 변환하여 저장 ---
                 currentUser.skills = userSelectedSkillsList.joinToString(", ")
-                // ---------------------------------------------------------------------------------
                 currentUser.experience = editExperience.text.toString()
                 currentUser.strength = editStrength.text.toString()
                 currentUser.interests = editInterests.text.toString()
@@ -308,8 +286,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUsersTab() {
-        // 역할 필터 설정
-        val roles = arrayOf("전체", "프론트엔드", "백엔드", "풀스택", "디자이너", "기획자", "PM")
+        val roles = arrayOf("전체", "프론트엔드", "백엔드", "풀스택", "디자이너", "기획자", "PM", "AI/ML 엔지니어", "데이터 사이언티스트")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, roles)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerRoleFilter.adapter = adapter
@@ -335,13 +312,7 @@ class MainActivity : AppCompatActivity() {
         val users = dbHelper.getUsersByRole(role).filter { it.userId != currentUserId }
 
         if (userListAdapter == null) {
-            userListAdapter = UserListAdapter(
-                this,
-                ArrayList(users),
-                currentUserId,
-                dbHelper
-            ) { user ->
-                // 관심 표시/취소 후 새로고침
+            userListAdapter = UserListAdapter(this, ArrayList(users), currentUserId, dbHelper) {
                 refreshUsersTab(role)
             }
             listViewUsers.adapter = userListAdapter
@@ -350,9 +321,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupInterestTab() {
-        // 관심 탭은 자동 새로고침
-    }
+    private fun setupInterestTab() {}
 
     private fun refreshInterestTab() {
         val myInterests = dbHelper.getUserInterests(currentUserId)
@@ -368,6 +337,71 @@ class MainActivity : AppCompatActivity() {
             "나에게 관심을 표시한 유저가 없습니다"
         } else {
             receivedInterests.joinToString("\n") { "• ${it.name} (${it.role})" }
+        }
+    }
+
+    private fun setupProjectsTab() {
+        btnCreateProject.setOnClickListener {
+            val intent = Intent(this, CreateProjectActivity::class.java)
+            intent.putExtra("userId", currentUserId)
+            startActivityForResult(intent, 100)
+        }
+
+        val statuses = arrayOf("전체", "recruiting", "closed")
+        val statusLabels = arrayOf("전체", "모집중", "모집마감")
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, statusLabels)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerStatusFilter.adapter = spinnerAdapter
+
+        spinnerStatusFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedStatus = statuses[position]
+                loadProjects(selectedStatus)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        btnMyProjects.setOnClickListener {
+            val intent = Intent(this, MyProjectsActivity::class.java)
+            intent.putExtra("userId", currentUserId)
+            startActivity(intent)
+        }
+
+        btnMyApplications.setOnClickListener {
+            val intent = Intent(this, MyApplicationsActivity::class.java)
+            intent.putExtra("userId", currentUserId)
+            startActivity(intent)
+        }
+
+        listViewProjects.setOnItemClickListener { _, _, position, _ ->
+            val project = projectListAdapter?.getItem(position) as? Project ?: return@setOnItemClickListener
+            val intent = Intent(this, ProjectDetailActivity::class.java)
+            intent.putExtra("userId", currentUserId)
+            intent.putExtra("projectId", project.projectId)
+            startActivity(intent)
+        }
+    }
+
+    private fun refreshProjectsTab() {
+        val selectedPosition = spinnerStatusFilter.selectedItemPosition
+        val statuses = arrayOf("전체", "recruiting", "closed")
+        loadProjects(statuses[selectedPosition])
+    }
+
+    private fun loadProjects(status: String = "전체") {
+        val projects = if (status == "전체") {
+            dbHelper.getAllProjects()
+        } else {
+            dbHelper.getProjectsByStatus(status)
+        }
+
+        textProjectCount.text = "${projects.size}개 프로젝트"
+
+        if (projectListAdapter == null) {
+            projectListAdapter = ProjectListAdapter(this, projects, dbHelper)
+            listViewProjects.adapter = projectListAdapter
+        } else {
+            projectListAdapter?.updateData(projects)
         }
     }
 
@@ -391,6 +425,10 @@ class MainActivity : AppCompatActivity() {
                     dbHelper.writableDatabase.execSQL("DELETE FROM applicationTBL")
                     dbHelper.writableDatabase.execSQL("DELETE FROM memberTBL")
                     Toast.makeText(this, "데이터가 초기화되었습니다", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                     finish()
                 }
                 .setNegativeButton("취소", null)
@@ -398,6 +436,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnLogout.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
         }
     }
@@ -411,7 +452,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showEditUserInfoDialog() {
-        val dialogView = layoutInflater.inflate(android.R.layout.select_dialog_item, null)
         val container = LinearLayout(this)
         container.orientation = LinearLayout.VERTICAL
         container.setPadding(50, 40, 50, 10)
@@ -462,16 +502,6 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun setupProjectsTab() {
-        val btnGoToProjects = findViewById<Button>(R.id.btnGoToProjects)
-        btnGoToProjects.setOnClickListener {
-            val intent = Intent(this, ProjectListActivity::class.java)
-            intent.putExtra("userId", currentUserId)
-            startActivity(intent)
-        }
-    }
-
-    // 9주차: 파일 쓰기
     private fun exportData() {
         try {
             val exportDir = getExternalFilesDir(null)
@@ -481,96 +511,82 @@ class MainActivity : AppCompatActivity() {
             writer.write("=== 팀 빌딩 데이터 내보내기 ===\n")
             writer.write("작성일: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())}\n\n")
 
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
             writer.write("내 프로필\n")
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
+            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            writer.write("이름: ${currentUser.name}\n")
+            writer.write("학번: ${currentUser.userId}\n")
+            writer.write("연락처: ${currentUser.contact}\n\n")
 
-            writer.write("👤 기본 정보\n")
-            writer.write("  • 이름: ${currentUser.name}\n")
-            writer.write("  • 학번: ${currentUser.userId}\n")
-            writer.write("  • 연락처: ${currentUser.contact}\n")
-            writer.write("  • 역할: ${currentUser.role.ifEmpty { "미정" }}\n\n")
+            // 역할
+            if (currentUser.role.isNotEmpty()) {
+                writer.write("역할: ${currentUser.role}\n")
+            }
 
-            writer.write("🛠️ 기술 스택\n")
-            writer.write("  ${currentUser.skills.ifEmpty { "미정" }}\n\n")
-
-            writer.write("📚 개발 경험\n")
-            writer.write("  ${currentUser.experience.ifEmpty { "미정" }}\n\n")
-
-            writer.write("💪 자신 있는 부분\n")
-            writer.write("  ${currentUser.strength.ifEmpty { "미정" }}\n\n")
-
-            writer.write("💡 관심 주제\n")
-            writer.write("  ${currentUser.interests.ifEmpty { "미정" }}\n\n")
-
-            writer.write("🤝 함께 하고 싶은 팀원\n")
-            writer.write("  ${currentUser.preferredTeammate.ifEmpty { "미정" }}\n\n")
-
-            writer.write("🎯 협업 스타일\n")
-            writer.write("  ${currentUser.collaborationStyle.ifEmpty { "미정" }}\n\n")
-
-            writer.write("💻 GitHub\n")
-            writer.write("  ${currentUser.github.ifEmpty { "미정" }}\n\n")
-
-            writer.write("📊 통계\n")
-            writer.write("  • 받은 관심: ${currentUser.receivedInterests}개\n")
-            writer.write("  • Level: ${calculateLevel(currentUser.receivedInterests)}\n\n")
-
-            // 내가 관심 표시한 유저
-            val myInterests = dbHelper.getUserInterests(currentUserId)
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-            writer.write("내가 관심 표시한 유저 (${myInterests.size}명)\n")
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
-            if (myInterests.isEmpty()) {
-                writer.write("  없음\n\n")
+            // 보유 기술
+            if (currentUser.skills.isNotEmpty()) {
+                writer.write("보유 기술: ${currentUser.skills}\n")
             } else {
-                myInterests.forEach { user ->
-                    writer.write("  📌 ${user.name} (${user.role})\n")
-                    writer.write("     기술: ${user.skills}\n")
-                    writer.write("     연락처: ${user.contact}\n\n")
-                }
+                writer.write("보유 기술: 미등록\n")
             }
 
-            // 나에게 관심 표시한 유저
-            val receivedInterests = dbHelper.getReceivedInterests(currentUserId)
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-            writer.write("나에게 관심 표시한 유저 (${receivedInterests.size}명)\n")
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
-            if (receivedInterests.isEmpty()) {
-                writer.write("  없음\n\n")
+            // 프로젝트 경험
+            if (currentUser.experience.isNotEmpty()) {
+                writer.write("\n프로젝트 경험:\n${currentUser.experience}\n")
             } else {
-                receivedInterests.forEach { user ->
-                    writer.write("  💝 ${user.name} (${user.role})\n")
-                    writer.write("     기술: ${user.skills}\n")
-                    writer.write("     연락처: ${user.contact}\n\n")
-                }
+                writer.write("\n프로젝트 경험: 미등록\n")
             }
 
-            // 전체 회원 통계
-            val allUsers = dbHelper.getAllUsers()
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-            writer.write("전체 회원 통계 (${allUsers.size}명)\n")
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
-
-            // 역할별 통계
-            val roleStats = allUsers.groupBy { it.role }.mapValues { it.value.size }
-            writer.write("📊 역할별 분포\n")
-            roleStats.forEach { (role, count) ->
-                if (role.isNotEmpty()) {
-                    writer.write("  • ${role}: ${count}명\n")
-                }
-            }
-            writer.write("\n")
-
-            // 전체 회원 목록
-            writer.write("📋 전체 회원 목록\n")
-            allUsers.sortedBy { it.name }.forEach { user ->
-                writer.write("  • ${user.name} (${user.role.ifEmpty { "미정" }}) - ${user.contact}\n")
+            // 강점
+            if (currentUser.strength.isNotEmpty()) {
+                writer.write("\n강점:\n${currentUser.strength}\n")
+            } else {
+                writer.write("\n강점: 미등록\n")
             }
 
-            writer.write("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-            writer.write("End of Report\n")
-            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            // 관심 분야
+            if (currentUser.interests.isNotEmpty()) {
+                writer.write("\n관심 분야:\n${currentUser.interests}\n")
+            } else {
+                writer.write("\n관심 분야: 미등록\n")
+            }
+
+            // 선호하는 팀원 유형
+            if (currentUser.preferredTeammate.isNotEmpty()) {
+                writer.write("\n선호하는 팀원 유형:\n${currentUser.preferredTeammate}\n")
+            } else {
+                writer.write("\n선호하는 팀원 유형: 미등록\n")
+            }
+
+            // 협업 스타일
+            if (currentUser.collaborationStyle.isNotEmpty()) {
+                writer.write("\n협업 스타일:\n${currentUser.collaborationStyle}\n")
+            } else {
+                writer.write("\n협업 스타일: 미등록\n")
+            }
+
+            // GitHub
+            if (currentUser.github.isNotEmpty()) {
+                writer.write("\nGitHub: ${currentUser.github}\n")
+            }
+
+            // 통계
+            writer.write("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            writer.write("활동 통계\n")
+            writer.write("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            writer.write("받은 관심 표시: ${currentUser.receivedInterests}명\n")
+
+            // 내가 생성한 프로젝트
+            val myProjects = dbHelper.getMyProjects(currentUserId)
+            writer.write("생성한 프로젝트: ${myProjects.size}개\n")
+
+            // 참여 중인 프로젝트
+            val participatingProjects = dbHelper.getMyParticipatingProjects(currentUserId)
+            writer.write("참여 중인 프로젝트: ${participatingProjects.size}개\n")
+
+            // 지원한 프로젝트
+            val myApplications = dbHelper.getMyApplications(currentUserId)
+            writer.write("지원한 프로젝트: ${myApplications.size}개\n")
 
             writer.close()
 
@@ -580,27 +596,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculateLevel(receivedInterests: Int): String {
-        return when {
-            receivedInterests >= 21 -> "Level 5"
-            receivedInterests >= 11 -> "Level 4"
-            receivedInterests >= 6 -> "Level 3"
-            receivedInterests >= 3 -> "Level 2"
-            else -> "Level 1"
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        // 다른 액티비티에서 돌아왔을 때 현재 탭 새로고침
         val currentTab = when {
             layoutProfile.visibility == View.VISIBLE -> 0
             layoutUsers.visibility == View.VISIBLE -> 1
             layoutInterest.visibility == View.VISIBLE -> 2
-            layoutSettings.visibility == View.VISIBLE -> 3
-            layoutProjects.visibility == View.VISIBLE -> 4
+            layoutProjects.visibility == View.VISIBLE -> 3
+            layoutSettings.visibility == View.VISIBLE -> 4
             else -> 0
         }
         showTab(currentTab)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            refreshProjectsTab()
+        }
     }
 }
